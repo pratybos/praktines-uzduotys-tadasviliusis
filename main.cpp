@@ -1,134 +1,113 @@
 #include <iostream>
-#include "Composite.h"
-#include "Leaf.h"
-#include "Color.h"
+#include <fstream>
+#include <string>
+#include <windows.h>
 
 using namespace std;
 
-int main() {
-    auto*FishingShop = new Composite("FISHING SHOP");
+const string top = "<!doctype html>\n<html lang=\"en\">\n<head>\n<title>Puslapis</title>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<style>\ntable {border-collapse: collapse;width: 100%;}\nth, td {text-align: left; padding: 8px;}\ntr:nth-child(even) { background-color: #D6EEEE;}\n* {\nbox-sizing: border-box;\n}\nbody {\n background-image:url(\"https://www.appmachine.com/wp-content/uploads/2016/02/No-Branding-Header-Background-1.jpg\");\nmargin: 0;\n}\n.header {padding: 8px;text-align: center;background-image: url(\"https://www.appmachine.com/wp-content/uploads/2016/02/No-Branding-Header-Background-1.jpg\");color: white}\n.header h1 {font-size: 40px;}\n.navbar {overflow: hidden;background-color: black;position: sticky;position: -webkit-sticky;top: 0;}\n.navbar a {float: left;display: block;color: white;text-align: center;padding: 14px 20px;text-decoration: none;}\n.row {  display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap; flex-wrap: wrap;}\n.side {-ms-flex: 30%;flex: 30%; background-image:url(\"https://www.desktopbackground.org/p/2010/06/04/28104_2560x1600-light-blue-solid-color-background-jpg_2560x1600_h.jpg\"); padding: 20px;}\n.main {-ms-flex: 70%; flex: 70%;background-image:url(\"https://www.desktopbackground.org/p/2010/06/04/28104_2560x1600-light-blue-solid-color-background-jpg_2560x1600_h.jpg\");padding: 20px;}\n.footer {padding: 20px;text-align: center;background: #ddd;}\n@media screen and (max-width: 700px) {.row {flex-direction: column;}}\n@media screen and (max-width: 400px) {.navbar a {float: none; width: 100%;}}\n</style>\n</head>\n<body>";
 
-    auto *fishingEquipment = new Composite("FISHING EQUIPMENT");
-    auto *clothes = new Composite("CLOTHES");
-    auto *warehouse = new Composite("WAREHOUSE");
+const string bottom = "\n</body>\n</html>";
 
-    FishingShop->AddComponent(fishingEquipment);
-    FishingShop->AddComponent(clothes);
-    FishingShop->AddComponent(warehouse);
+void header(ofstream &document){
+    cout<<"Įrašykite puslapio pavadinimą"<<endl;
+    string var;
+    getline(cin, var);
+    document<<"<div class=\"header\">\n<h1>"<<var<<"</h1>\n</div>";
+}
 
+void navigationBar(ofstream &document){
+    cout<<"Ar norite pridėti papildomų nuorodų į puslapį?  y/n";
+    string temp;
+    getline(cin, temp);
+    document<<"<div class=\"navbar\">\n<a href=\"#\" class=\"active\">Pagrindinis</a>\n";
+    while(temp == "y"){
+        cout<<"Įrašykite nuorodos pavadinimą"<<endl;
+        getline(cin, temp);
+        cout<<"Įrašykite šio puslapio adresą į kurį busite nuokreipti paspaudę [ https://www.........com ]"<<endl;
+        string link;
+        getline(cin, link);
+        document<<"<a href=\""<<link<<"\">"<<temp<<"</a>\n";
+        cout<<"Ar norite pridėti papildomų nuorodų? y/n"<<endl;
+        getline(cin, temp);
+    }
+    document<<"</div>\n";
+}
 
-
-    auto *FishingRod = new Leaf("Fly Fishing Rod", 99.99);
-    auto *FishingReel = new Leaf("Fly Fishing Reel", 65.99);
-    auto *FishingRope = new Leaf("fly Fishing Line", 23.99);
-    auto *FishingScale = new Leaf("Boga Grip Fishing Scale", 32.99);
-    auto *LuresandBaitBox = new Leaf("Spinner lures and bugs box",45.99);
-
-    auto *FishingBoots = new Leaf("Water and dust durable boots", 189.99);
-    auto *FishingWader = new Leaf("Lightweight fishing wader",89.99);
-    auto *FishingVest = new Leaf("Duty heavy vest", 59.99);
-    auto *Gloves = new Leaf("Hard leather injury resistant gloves", 48.99);
-    auto *FishingTowel = new Leaf("Quick drying towel pack", 24.99);
-
-    auto *SpareFishingEquipment = new Leaf("Fishing rod and reel set", 150.99);
-    auto *SpareFishingClothes = new Leaf("Boots,Vest,Wader,Gloves set", 89.99);
-
-    fishingEquipment->AddComponent(FishingRod);
-    fishingEquipment->AddComponent(FishingReel);
-    fishingEquipment->AddComponent(FishingRope);
-    fishingEquipment->AddComponent(FishingScale);
-    fishingEquipment->AddComponent(LuresandBaitBox);
-
-    clothes->AddComponent(FishingBoots);
-    clothes->AddComponent(FishingTowel);
-    clothes->AddComponent(FishingWader);
-    clothes->AddComponent(FishingVest);
-    clothes->AddComponent(Gloves);
-
-    warehouse->AddComponent(SpareFishingEquipment);
-    warehouse->AddComponent(SpareFishingClothes);
-
-    fishingEquipment->ReflectInformation();
-    cout << "InTotal: " << fishingEquipment->GetPrice() << endl;
-    clothes->ReflectInformation();
-    cout << "InTotal: " << clothes->GetPrice() << endl;
-    warehouse->ReflectInformation();
-    cout << "InTotal: " << warehouse->GetPrice() << endl;
-
-    int number = 1;
-    while (number != 0) {
-
-
-    Color::setColor(11);
-
-    cout << "++++++++++++++++++++++++++++" << endl;
-    cout << "---+++      MENIU     +++---" << endl;
-    cout << "++++++++++++++++++++++++++++" << endl;
-    cout << "1. Show FishingShop" << endl;
-    cout << "2. Show fishingEquipment" << endl;
-    cout << "3. Show clothes" << endl;
-    cout << "4. Show warehouse" << endl;
-    cout << "5. Show price" << endl;
-    cout << "6. Add new component to FishingShop" << endl;
-    cout << "0. Quit" << endl;
-
-    Color::setColor(12);
-    cout << "Select a MENIU number: " ;
-    cin >> number;
-
-    switch (number) {
-        case 1:
-            FishingShop->ReflectInformation();
-            break;
-        case 2:
-            fishingEquipment->ReflectInformation();
-            break;
-        case 3:
-            clothes->ReflectInformation();
-            break;
-        case 4:
-            warehouse->ReflectInformation();
-            break;
-        case 5:
-            Color::setColor(15);
-           cout << FishingShop->GetPrice() << endl;
-           break;
-        case 6: {
-            cout << "Adding a new component " << endl;
-
-            string category;
-            cout << "Write a category name: " ;
-            cin.ignore();
-            getline(cin,category);
-
-
-            auto * cat = new Composite(category);
-
-            string name;
-            double price;
-            cout << "Add a name of a new component: ";
-            getline(cin, name);
-            cout << "Add a price of a new component : ";
-            cin >> price;
-
-            auto *components = new Leaf(name, price);
-            cat->AddComponent(components);
-            FishingShop->AddComponent(cat);
-            break;
-
+void puslapioInfo(ofstream &document){
+    cout<<"Įrašykite šio puslapio tikslą"<<endl;
+    string info;
+    getline(cin, info);
+    document<<"<div class=\"row\">\n<div class=\"side\">\n<h2>Tikslas:</h2>\n<p>"<<info<<"</p>\n";
+    cout<<"Ar norite įrašyti plačiau? y/n"<<endl;
+    string temp;
+    getline(cin, temp);
+    if (temp == "y"){
+        cout<<"Kaip pavadinsite šią temą?"<<endl;
+        string temp;
+        getline(cin, temp);
+        document<<"<h2>"<<temp<<"</h2>\n";
+        cout<<"Įrašykite šios temos aprašymą"<<endl;
+        getline(cin, info);
+        document<<"<p>"<<info<<"</p>\n";
+        cout<<"Ar norite įkelti aprašytos temos nuotrauką? y/n"<<endl;
+        getline(cin, temp);
+        if(temp == "y"){
+            cout<<"Įrašykite norimą nuotraukos adresą [ URL, turi būti JPG] "<<endl;
+            getline(cin, info);
+            document<<"<img src=\""<<info<<"\" width=\"350\" height=\"350\">\n";
         }
-        default:
-        cout << "Such number does not exist, please use existing numbers ! ! !" << endl;
-        break;
+    }
+    document<<"</div>\n";
+}
 
+
+void papildomaInfo(ofstream &document){
+    string temp;
+
+    cout<<"Įrašykite sukurtos nuorodos temos pavadinimą"<<endl;
+    getline(cin, temp);
+    document<<"<div class=\"main\">\n<h2>"<<temp<<"</h2>\n";
+    cout<<"Irašykite trumpa šios temos aprašymą"<<endl;
+    getline(cin, temp);
+    document<<"<h5>"<<temp<<"</h5>\n";
+    cout<<"Papildoma šios temos informacija rašykite čia"<<endl;
+    getline(cin, temp);
+    document<<"<p>"<<temp<<"</p>";
+    cout<<"Ar norite įkelti apraštos temos nuotrauką? y/n"<<endl;
+    getline(cin, temp);
+    if(temp == "y"){
+        cout<<"Įrašykite norima nuotraukos adresą [ URL, turi būti JPG] "<<endl;
+        getline(cin, temp);
+        document<<"<img src=\""<<temp<<"\" width=\"350\" height=\"350\">\n";
     }
 }
 
-        
+void removeFile(bool isNeedToRemove, const string &filename) {
+    if (isNeedToRemove)
+        remove(filename.c_str());
+}
 
+int main() {
 
+    SetConsoleOutputCP(CP_UTF8);
+    ofstream file;
 
+    removeFile(true, "index.html");
 
+    file.open("index.html", ios::app);
+    file << top;
+
+    header(file);
+    navigationBar(file);
+    puslapioInfo(file);
+    papildomaInfo(file);
+
+    file<<bottom;
+
+    file.close();
+
+    ShellExecute(nullptr, "open", "index.html", nullptr, nullptr, SW_SHOWNORMAL);
 
     return 0;
 }
